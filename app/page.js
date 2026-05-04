@@ -89,7 +89,7 @@ const scopeTopics = [
 ]
 
 const editorialBoard = {
-  jefe: { name: 'Lucas Henckel', role: 'Editor en Jefe' },
+  jefe: { name: 'Lucas Henkel', role: 'Editor en Jefe' },
   editorial: [
     { name: 'William Medina' },
     { name: 'Norma Raúl' },

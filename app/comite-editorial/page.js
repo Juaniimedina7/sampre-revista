@@ -9,7 +9,7 @@ export const metadata = {
 }
 
 const jefe = {
-  name: 'Lucas Henckel',
+  name: 'Lucas Henkel',
   role: 'Editor en Jefe',
   bio: 'Técnico Superior en Emergencias Médicas. Especialidad en Medicina de Montaña (ICAR). Facultado NAEMT PHTLS y AMLS. Instructor ACLS. Miembro del Comité Latinoamericano de Educación NAEMT. Director SAR Bariloche. Secretario Administrativo de SAMPRE.',
 }
