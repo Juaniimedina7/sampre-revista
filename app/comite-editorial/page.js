@@ -72,7 +72,7 @@ export default function ComiteEditorialPage() {
               Comité Editorial
             </h1>
             <p className="text-gray-600">
-              Profesionales de referencia en medicina prehospitalaria. Período 2025-2028.
+              Profesionales de referencia en medicina prehospitalaria. Período 2026-2028.
             </p>
           </div>
         </div>
