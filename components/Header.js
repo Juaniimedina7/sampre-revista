@@ -168,21 +168,21 @@ export default function Header() {
 
       {/* ── Masthead ── */}
       <div className="bg-white border-b-2 border-journal-navy">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-4 group flex-shrink-0 min-w-0">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 md:py-4 flex items-center justify-between gap-2 sm:gap-4">
+          <Link href="/" className="flex items-center gap-2 sm:gap-3 md:gap-4 group min-w-0 flex-1 lg:flex-initial">
             <img
               src="/images/logos/logo-sampre.PNG"
               alt="SAMPRE"
-              className="h-12 w-auto object-contain"
+              className="h-9 sm:h-10 md:h-12 w-auto object-contain flex-shrink-0"
             />
             <div className="min-w-0">
               <div
-                className="text-3xl font-bold leading-none tracking-tight text-journal-navy"
+                className="text-xl sm:text-2xl md:text-3xl font-bold leading-none tracking-tight text-journal-navy"
                 style={{ fontFamily: 'var(--font-display)' }}
               >
                 RAMP
               </div>
-              <div className="text-xs text-gray-500 leading-tight mt-0.5 max-w-xs truncate">
+              <div className="hidden sm:block text-[10px] md:text-xs text-gray-500 leading-tight mt-0.5 max-w-xs truncate">
                 Revista Argentina de Medicina Prehospitalaria
               </div>
             </div>
@@ -237,18 +237,20 @@ export default function Header() {
           </div>
 
           {/* Iconos mobile */}
-          <div className="flex items-center gap-1 lg:hidden">
+          <div className="flex items-center gap-0.5 sm:gap-1 lg:hidden flex-shrink-0">
             <button
-              className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
-              onClick={() => setSearchOpen(!searchOpen)}
+              type="button"
+              className="p-2 rounded-lg text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors"
+              onClick={() => { setSearchOpen(!searchOpen); setMenuOpen(false) }}
               aria-label="Buscar"
               aria-expanded={searchOpen}
             >
               <Search className="w-5 h-5" />
             </button>
             <button
-              className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
-              onClick={() => setMenuOpen(!menuOpen)}
+              type="button"
+              className="p-2 rounded-lg text-gray-700 hover:bg-gray-100 active:bg-gray-200 transition-colors"
+              onClick={() => { setMenuOpen(!menuOpen); setSearchOpen(false) }}
               aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
               aria-expanded={menuOpen}
             >
