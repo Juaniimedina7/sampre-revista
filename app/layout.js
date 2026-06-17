@@ -80,7 +80,13 @@ export const metadata = {
       'max-video-preview': -1,
     },
   },
-  icons: { icon: '/favicon.ico' },
+  icons: {
+    icon: [
+      { url: '/images/logos/favicon.png', type: 'image/png' },
+    ],
+    shortcut: '/images/logos/favicon.png',
+    apple: '/images/logos/favicon.png',
+  },
   referrer: 'origin-when-cross-origin',
 }
 

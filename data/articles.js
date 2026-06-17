@@ -72,7 +72,7 @@ export const articles = [
     acceptedDate: '2026-04-05',
     publishedDate: '2026-05-15',
     pdfUrl: '/pdfs/vol1-num1/aplicabilidad-ssc-2026-shock-septico-pediatrico.pdf',
-    heroImage: null,
+    heroImage: '/images/portadas/survivingSepsisCampaign2026.png',
     videoUrl: null,
   },
   {

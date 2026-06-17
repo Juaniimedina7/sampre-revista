@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import { Menu, X, Search } from 'lucide-react'
@@ -9,15 +9,114 @@ const navLinks = [
   { href: '/',                             label: 'Inicio' },
   { href: '/ediciones',                    label: 'Ediciones' },
   { href: '/articulos',                    label: 'Artículos' },
-  { href: '/comite-editorial',             label: 'Comité Editorial' },
+  { href: '/comite-editorial',             label: 'Comité Editorial', shortLabel: 'Comité' },
   { href: '/instrucciones-para-autores',   label: 'Instrucciones' },
-  { href: '/politica-editorial',           label: 'Política Editorial' },
-  { href: '/contacto',                     label: 'Enviar Manuscrito' },
+  { href: '/politica-editorial',           label: 'Política Editorial', xlOnly: true },
+  { href: '/contacto',                     label: 'Enviar Manuscrito', shortLabel: 'Enviar' },
 ]
 
-function SearchForm({ onSubmit, autoFocus, placeholder = 'Buscar artículos, autores, palabras clave...' }) {
+function DesktopSearch({ active, setActive }) {
   const router = useRouter()
   const [query, setQuery] = useState('')
+  const inputRef = useRef(null)
+  const formRef = useRef(null)
+
+  useEffect(() => {
+    if (!active) return
+    const onClickOutside = (e) => {
+      if (formRef.current && !formRef.current.contains(e.target) && !query.trim()) {
+        setActive(false)
+      }
+    }
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        setQuery('')
+        setActive(false)
+        inputRef.current?.blur()
+      }
+    }
+    document.addEventListener('mousedown', onClickOutside)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onClickOutside)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [active, query, setActive])
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const q = query.trim()
+    router.push(q ? `/articulos?q=${encodeURIComponent(q)}` : '/articulos')
+    setQuery('')
+    setActive(false)
+    inputRef.current?.blur()
+  }
+
+  const open = () => {
+    setActive(true)
+    setTimeout(() => inputRef.current?.focus(), 60)
+  }
+
+  return (
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit}
+      role="search"
+      className={`relative transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex-shrink-0 ${
+        active ? 'w-72 xl:w-96' : 'w-10'
+      }`}
+    >
+      <button
+        type="button"
+        onClick={open}
+        tabIndex={active ? -1 : 0}
+        aria-label="Abrir buscador"
+        className={`absolute inset-y-0 left-0 z-10 flex items-center justify-center transition-colors ${
+          active
+            ? 'w-10 text-primary-600 pointer-events-none'
+            : 'w-10 text-gray-500 hover:text-primary-600 rounded-lg hover:bg-gray-100 cursor-pointer'
+        }`}
+      >
+        <Search className="w-4 h-4" />
+      </button>
+      <label htmlFor="header-search" className="sr-only">Buscar artículos</label>
+      <input
+        ref={inputRef}
+        id="header-search"
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onFocus={() => setActive(true)}
+        placeholder="Buscar artículos, autores, palabras clave..."
+        autoComplete="off"
+        tabIndex={active ? 0 : -1}
+        aria-hidden={!active}
+        className={`w-full pl-9 py-2 text-sm text-gray-900 placeholder:text-gray-400 rounded-lg outline-none transition-all duration-300 ${
+          active
+            ? 'border border-primary-300 bg-white ring-2 ring-primary-500 pr-9 shadow-sm opacity-100'
+            : 'border border-transparent bg-transparent pr-0 opacity-0 pointer-events-none'
+        }`}
+      />
+      {active && query && (
+        <button
+          type="button"
+          onClick={() => { setQuery(''); inputRef.current?.focus() }}
+          aria-label="Limpiar búsqueda"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+        >
+          <X className="w-3.5 h-3.5" />
+        </button>
+      )}
+    </form>
+  )
+}
+
+function MobileSearch({ onSubmit }) {
+  const router = useRouter()
+  const [query, setQuery] = useState('')
+  const inputRef = useRef(null)
+
+  useEffect(() => { inputRef.current?.focus() }, [])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -29,15 +128,16 @@ function SearchForm({ onSubmit, autoFocus, placeholder = 'Buscar artículos, aut
   return (
     <form onSubmit={handleSubmit} className="relative w-full" role="search">
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-      <label htmlFor="header-search" className="sr-only">Buscar artículos</label>
+      <label htmlFor="header-search-mobile" className="sr-only">Buscar artículos</label>
       <input
-        id="header-search"
-        type="search"
+        ref={inputRef}
+        id="header-search-mobile"
+        type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        autoFocus={autoFocus}
-        placeholder={placeholder}
-        className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition"
+        placeholder="Buscar artículos, autores, palabras clave..."
+        autoComplete="off"
+        className="w-full pl-9 pr-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-colors"
       />
     </form>
   )
@@ -46,6 +146,7 @@ function SearchForm({ onSubmit, autoFocus, placeholder = 'Buscar artículos, aut
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [searchActive, setSearchActive] = useState(false)
   const pathname = usePathname()
 
   return (
@@ -68,61 +169,72 @@ export default function Header() {
       {/* ── Masthead ── */}
       <div className="bg-white border-b-2 border-journal-navy">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-4 group flex-shrink-0">
+          <Link href="/" className="flex items-center gap-4 group flex-shrink-0 min-w-0">
             <img
               src="/images/logos/logo-sampre.PNG"
               alt="SAMPRE"
               className="h-12 w-auto object-contain"
             />
-            <div>
+            <div className="min-w-0">
               <div
                 className="text-3xl font-bold leading-none tracking-tight text-journal-navy"
                 style={{ fontFamily: 'var(--font-display)' }}
               >
                 RAMP
               </div>
-              <div className="text-xs text-gray-500 leading-tight mt-0.5 max-w-xs">
+              <div className="text-xs text-gray-500 leading-tight mt-0.5 max-w-xs truncate">
                 Revista Argentina de Medicina Prehospitalaria
               </div>
             </div>
           </Link>
 
-          {/* Buscador desktop */}
-          <div className="hidden lg:block flex-1 max-w-md">
-            <SearchForm />
-          </div>
-
-          {/* Nav desktop */}
-          <nav className="hidden lg:flex items-center gap-1 flex-shrink-0">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href
-              const isSubmit = link.href === '/contacto'
-              if (isSubmit) {
+          {/* Buscador + nav desktop */}
+          <div className="hidden lg:flex items-center flex-shrink-0 justify-end gap-2">
+            <nav
+              aria-hidden={searchActive}
+              className={`flex items-center gap-0.5 flex-shrink-0 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                searchActive
+                  ? 'opacity-0 translate-x-6 pointer-events-none max-w-0 overflow-hidden'
+                  : 'opacity-100 translate-x-0 max-w-[60rem]'
+              }`}
+            >
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href
+                const isSubmit = link.href === '/contacto'
+                const hideClass = link.xlOnly ? 'hidden xl:inline-flex' : 'inline-flex'
+                if (isSubmit) {
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      tabIndex={searchActive ? -1 : 0}
+                      className={`${hideClass} ml-2 px-3.5 py-2 rounded-lg bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition-colors whitespace-nowrap items-center`}
+                    >
+                      <span className="xl:inline hidden">{link.label}</span>
+                      <span className="xl:hidden inline">{link.shortLabel || link.label}</span>
+                    </Link>
+                  )
+                }
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="ml-2 px-4 py-2 rounded-lg bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition-colors"
+                    tabIndex={searchActive ? -1 : 0}
+                    className={`${hideClass} px-2 py-2 text-sm font-medium rounded transition-colors whitespace-nowrap items-center ${
+                      isActive
+                        ? 'text-primary-700 bg-primary-50'
+                        : 'text-gray-600 hover:text-journal-navy hover:bg-gray-50'
+                    }`}
                   >
-                    {link.label}
+                    <span className="xl:inline hidden">{link.label}</span>
+                    <span className="xl:hidden inline">{link.shortLabel || link.label}</span>
                   </Link>
                 )
-              }
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`px-2.5 py-2 text-sm font-medium rounded transition-colors ${
-                    isActive
-                      ? 'text-primary-700 bg-primary-50'
-                      : 'text-gray-600 hover:text-journal-navy hover:bg-gray-50'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              )
-            })}
-          </nav>
+              })}
+            </nav>
+
+            <DesktopSearch active={searchActive} setActive={setSearchActive} />
+          </div>
 
           {/* Iconos mobile */}
           <div className="flex items-center gap-1 lg:hidden">
@@ -148,7 +260,7 @@ export default function Header() {
         {/* Buscador mobile */}
         {searchOpen && (
           <div className="lg:hidden border-t border-gray-100 bg-white px-4 py-3">
-            <SearchForm autoFocus onSubmit={() => setSearchOpen(false)} />
+            <MobileSearch onSubmit={() => setSearchOpen(false)} />
           </div>
         )}
 
