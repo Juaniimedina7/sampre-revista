@@ -5,7 +5,13 @@ import { Users, ArrowRight } from 'lucide-react'
 
 export const metadata = {
   title: 'Comité Editorial',
-  description: 'Editor en jefe, comité editorial y comité científico de la Revista Argentina de Medicina Prehospitalaria (RAMP).',
+  description: 'Editor en jefe, comité editorial y comité científico de la Revista Argentina de Medicina Prehospitalaria (RAMP). Período 2026-2028.',
+  alternates: { canonical: '/comite-editorial' },
+  openGraph: {
+    url: '/comite-editorial',
+    title: 'Comité Editorial | RAMP',
+    description: 'Equipo editorial y científico de la RAMP — período 2026-2028.',
+  },
 }
 
 const jefe = {
@@ -26,6 +32,19 @@ const comiteCientifico = [
   { name: 'Rodrigo García Marte',     role: 'Comité Científico', bio: 'Técnico en Emergencias Extrahospitalarias. Jefe del Departamento Técnico Operativo de Emergencias — Tierra del Fuego.' },
   { name: 'Kevin Bleuer',             role: 'Comité Científico', bio: 'Especialista en Medicina Agreste. Docente en formación prehospitalaria.' },
   { name: 'Carolina Pereyra Girardi', role: 'Comité Científico', bio: 'Profesional del área de emergencias médicas prehospitalarias.' },
+]
+
+const revisoresInternacionales = [
+  {
+    name: 'Luis Eduardo Vargas Téllez',
+    role: 'Revisor Internacional — Colombia',
+    bio: 'Especialista en Medicina de Emergencias (Universidad del Rosario, Colombia). Especialista en Gerencia en Salud (Universidad Santo Tomás). Médico egresado de la Pontificia Universidad Javeriana. Magíster en Educación y Proyectos Educativos Mediados por TIC (Universidad de La Sabana). CEO de Academia Emergencias. Jefe del Departamento de Urgencias de la Clínica Colsubsidio, Bogotá. Past Director del Posgrado de Medicina de Emergencias de la Universidad del Rosario. Past President de ALACED (Asociación Latinoamericana de Cooperación en Emergencias Médicas y Desastres).',
+  },
+  {
+    name: 'Dr. Carlos Malpica Coronado',
+    role: 'Revisor Internacional — Perú',
+    bio: 'Médico Cirujano. Presidente de la Sociedad Peruana de Atención Prehospitalaria (APH). Miembro del Cuerpo General de Bomberos Voluntarios del Perú e integrante del Grupo USAR (Urban Search and Rescue), especializado en búsqueda y rescate de víctimas atrapadas en estructuras colapsadas, espacios confinados y otras situaciones de emergencia.',
+  },
 ]
 
 function MemberCard({ member }) {
@@ -144,6 +163,22 @@ export default function ComiteEditorialPage() {
             </div>
             <div className="grid md:grid-cols-2 gap-5">
               {comiteCientifico.map((m) => <MemberCard key={m.name} member={m} />)}
+            </div>
+          </section>
+
+          {/* Revisores Internacionales */}
+          <section>
+            <div className="flex items-center gap-3 mb-6">
+              <h2
+                className="text-xl font-bold text-journal-navy whitespace-nowrap"
+                style={{ fontFamily: 'var(--font-display)' }}
+              >
+                Revisores Internacionales
+              </h2>
+              <div className="h-px flex-1 bg-gray-200" />
+            </div>
+            <div className="grid md:grid-cols-2 gap-5">
+              {revisoresInternacionales.map((m) => <MemberCard key={m.name} member={m} />)}
             </div>
           </section>
 

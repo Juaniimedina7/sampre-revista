@@ -11,16 +11,27 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-  const issue = issues.find((i) => String(i.id) === params.numero)
+  const { numero } = await params
+  const issue = issues.find((i) => String(i.id) === numero)
   if (!issue) return { title: 'Edición no encontrada' }
+  const url = `/ediciones/${issue.id}`
   return {
     title: `Vol. ${issue.volume}, N.° ${issue.number} — ${issue.title}`,
     description: issue.description,
+    alternates: { canonical: url },
+    openGraph: {
+      url,
+      type: 'website',
+      title: `Vol. ${issue.volume}, N.° ${issue.number} — ${issue.title} | RAMP`,
+      description: issue.description,
+      images: issue.coverImage ? [{ url: issue.coverImage }] : undefined,
+    },
   }
 }
 
 export default async function EdicionPage({ params }) {
-  const issue = issues.find((i) => String(i.id) === params.numero)
+  const { numero } = await params
+  const issue = issues.find((i) => String(i.id) === numero)
   if (!issue) notFound()
 
   const issueArticles = articles.filter((a) => a.issueId === issue.id)

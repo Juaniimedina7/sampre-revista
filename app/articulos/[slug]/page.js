@@ -4,37 +4,122 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { articles, ARTICLE_TYPES } from '@/data/articles'
 import { issues } from '@/data/issues'
-import { Calendar, User, Tag, Download, ArrowLeft, ExternalLink, BookOpen } from 'lucide-react'
+import { slugifyTag } from '@/lib/tags'
+import { getReadingTimeMinutes } from '@/lib/readingTime'
+import ShareButtons from '../_components/ShareButtons'
+import CiteButton from '../_components/CiteButton'
+import ArticleBody, { ArticleTOC } from '../_components/ArticleBody'
+import { Calendar, User, Tag, Download, ArrowLeft, ExternalLink, BookOpen, Clock } from 'lucide-react'
+
+const SITE_URL = 'https://revista.sampre.com.ar'
 
 export async function generateStaticParams() {
   return articles.map((a) => ({ slug: a.slug }))
 }
 
 export async function generateMetadata({ params }) {
-  const article = articles.find((a) => a.slug === params.slug)
+  const { slug } = await params
+  const article = articles.find((a) => a.slug === slug)
   if (!article) return { title: 'Artículo no encontrado' }
+  const url = `/articulos/${article.slug}`
+  const description = article.abstract?.slice(0, 200)
   return {
     title: article.title,
-    description: article.abstract?.slice(0, 200),
+    description,
+    keywords: article.keywords,
+    authors: article.authors.map((a) => ({ name: a.name })),
+    alternates: { canonical: url },
+    openGraph: {
+      url,
+      type: 'article',
+      title: article.title,
+      description,
+      images: article.heroImage ? [{ url: article.heroImage }] : undefined,
+      publishedTime: article.publishedDate || undefined,
+      authors: article.authors.map((a) => a.name),
+      tags: article.keywords,
+      section: ARTICLE_TYPES[article.type]?.label,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description,
+    },
   }
 }
 
 export default async function ArticuloPage({ params }) {
-  const article = articles.find((a) => a.slug === params.slug)
+  const { slug } = await params
+  const article = articles.find((a) => a.slug === slug)
   if (!article) notFound()
 
   const issue = issues.find((i) => i.id === article.issueId)
   const typeInfo = ARTICLE_TYPES[article.type] || {}
+  const readingTime = getReadingTimeMinutes(article)
+  const fullUrl = `${SITE_URL}/articulos/${article.slug}`
+  const hasBody = Array.isArray(article.sections) && article.sections.length > 0
+
+  const relatedArticles = articles
+    .filter((a) => a.slug !== article.slug)
+    .map((a) => ({
+      article: a,
+      score: (a.keywords || []).filter((kw) => (article.keywords || []).includes(kw)).length,
+    }))
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map((x) => x.article)
+
+  const articleLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ScholarlyArticle',
+    headline: article.title,
+    alternativeHeadline: article.titleEn || undefined,
+    inLanguage: 'es-AR',
+    abstract: article.abstract || undefined,
+    keywords: article.keywords?.join(', ') || undefined,
+    datePublished: article.publishedDate || undefined,
+    dateCreated: article.receivedDate || undefined,
+    dateModified: article.acceptedDate || undefined,
+    author: article.authors.map((a) => ({
+      '@type': 'Person',
+      name: a.name,
+      affiliation: a.affiliation ? { '@type': 'Organization', name: a.affiliation } : undefined,
+      identifier: a.orcid ? `https://orcid.org/${a.orcid}` : undefined,
+    })),
+    image: article.heroImage || undefined,
+    pagination: article.pages || undefined,
+    url: fullUrl,
+    license: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
+    isAccessibleForFree: true,
+    isPartOf: issue ? {
+      '@type': 'PublicationIssue',
+      issueNumber: issue.number,
+      datePublished: `${issue.year}`,
+      isPartOf: {
+        '@type': 'PublicationVolume',
+        volumeNumber: issue.volume,
+        isPartOf: {
+          '@type': 'Periodical',
+          name: 'Revista Argentina de Medicina Prehospitalaria',
+        },
+      },
+    } : undefined,
+    publisher: {
+      '@type': 'Organization',
+      name: 'Sociedad Argentina de Medicina Prehospitalaria',
+      url: 'https://sampre.com.ar',
+    },
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <Header />
       <main className="flex-1">
-        {/* Cabecera */}
         <div className="bg-journal-cream border-b border-gray-200 py-12">
           <div className="max-w-7xl mx-auto px-4">
-            {/* Breadcrumb */}
-            <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-gray-500 mb-4">
               <Link href="/" className="hover:text-primary-600 transition-colors">Inicio</Link>
               <span>/</span>
               {issue && (
@@ -46,16 +131,14 @@ export default async function ArticuloPage({ params }) {
                 </>
               )}
               <span className="text-gray-800 font-medium line-clamp-1">{article.title}</span>
-            </div>
+            </nav>
 
-            {/* Badge tipo */}
             <div className="mb-4">
               <span className="px-3 py-1 rounded-full text-xs font-semibold bg-primary-100 text-primary-700">
                 {typeInfo.label || article.type}
               </span>
             </div>
 
-            {/* Título */}
             <h1
               className="text-2xl md:text-4xl font-bold text-journal-navy mb-4 max-w-4xl leading-snug"
               style={{ fontFamily: 'var(--font-display)' }}
@@ -63,36 +146,37 @@ export default async function ArticuloPage({ params }) {
               {article.title}
             </h1>
 
-            {/* Título en inglés */}
             {article.titleEn && (
               <p className="text-lg text-gray-500 mb-4 italic max-w-4xl">{article.titleEn}</p>
             )}
 
-            {/* Autores */}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-700 mb-4">
               {article.authors.map((author, i) => (
                 <span key={i} className="flex items-center gap-1.5">
                   <User className="w-3.5 h-3.5 text-gray-400" />
                   <span className="font-medium">{author.name}</span>
                   {author.isCorresponding && (
-                    <span className="text-primary-600 text-xs">✉</span>
+                    <span className="text-primary-600 text-xs" title="Autor de correspondencia">✉</span>
                   )}
                 </span>
               ))}
             </div>
 
-            {/* Afiliaciones */}
             {article.authors.some((a) => a.affiliation) && (
-              <div className="text-xs text-gray-500 mb-4">
-                {article.authors
-                  .filter((a) => a.affiliation)
-                  .map((a, i) => (
-                    <span key={i} className="block">{a.name}: {a.affiliation}</span>
-                  ))}
-              </div>
+              <details className="text-xs text-gray-500 mb-4">
+                <summary className="cursor-pointer hover:text-primary-600 transition-colors font-medium">
+                  Ver afiliaciones
+                </summary>
+                <div className="mt-2 space-y-1">
+                  {article.authors
+                    .filter((a) => a.affiliation)
+                    .map((a, i) => (
+                      <span key={i} className="block">{a.name}: {a.affiliation}</span>
+                    ))}
+                </div>
+              </details>
             )}
 
-            {/* Metadatos */}
             <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500">
               {article.publishedDate && (
                 <span className="flex items-center gap-1.5">
@@ -109,8 +193,12 @@ export default async function ArticuloPage({ params }) {
                   Vol. {issue.volume}, N.° {issue.number} · {issue.year}
                 </Link>
               )}
-              {article.pages && (
-                <span>Págs. {article.pages}</span>
+              {article.pages && <span>Págs. {article.pages}</span>}
+              {readingTime && (
+                <span className="flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5" />
+                  {readingTime} min de lectura
+                </span>
               )}
               {article.doi && (
                 <a
@@ -125,16 +213,25 @@ export default async function ArticuloPage({ params }) {
           </div>
         </div>
 
-        {/* Contenido */}
         <div className="max-w-7xl mx-auto px-4 py-10">
           <div className="grid lg:grid-cols-4 gap-10">
 
-            {/* ── Artículo ── */}
             <div className="lg:col-span-3 space-y-8">
-              {/* Resumen */}
+
+              {article.heroImage && (
+                <div className="rounded-xl overflow-hidden border border-gray-200">
+                  <img
+                    src={article.heroImage}
+                    alt={article.title}
+                    className="w-full h-64 object-cover"
+                  />
+                </div>
+              )}
+
               {article.abstract && (
-                <section>
+                <section aria-labelledby="resumen-heading">
                   <h2
+                    id="resumen-heading"
                     className="text-lg font-bold text-journal-navy mb-3"
                     style={{ fontFamily: 'var(--font-display)' }}
                   >
@@ -162,20 +259,21 @@ export default async function ArticuloPage({ params }) {
                 </section>
               )}
 
-              {/* Palabras clave */}
               {article.keywords?.length > 0 && (
-                <section>
-                  <h2
-                    className="text-sm font-bold text-gray-700 mb-2 flex items-center gap-2"
-                  >
+                <section aria-labelledby="keywords-heading">
+                  <h2 id="keywords-heading" className="text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
                     <Tag className="w-4 h-4 text-primary-600" />
                     Palabras clave
                   </h2>
                   <div className="flex flex-wrap gap-2">
                     {article.keywords.map((kw) => (
-                      <span key={kw} className="text-sm bg-gray-100 text-gray-700 px-3 py-1 rounded-full border border-gray-200">
+                      <Link
+                        key={kw}
+                        href={`/temas/${slugifyTag(kw)}`}
+                        className="text-sm bg-gray-100 text-gray-700 hover:bg-primary-100 hover:text-primary-700 px-3 py-1 rounded-full border border-gray-200 transition-colors"
+                      >
                         {kw}
-                      </span>
+                      </Link>
                     ))}
                   </div>
                   {article.keywordsEn?.length > 0 && (
@@ -190,14 +288,45 @@ export default async function ArticuloPage({ params }) {
                 </section>
               )}
 
-              {/* Texto completo / PDF */}
-              {article.pdfUrl ? (
+              {article.videoUrl && (
                 <section>
                   <h2
                     className="text-lg font-bold text-journal-navy mb-4"
                     style={{ fontFamily: 'var(--font-display)' }}
                   >
-                    Texto Completo
+                    Material audiovisual
+                  </h2>
+                  <div className="rounded-xl overflow-hidden border border-gray-200 aspect-video">
+                    <iframe
+                      src={article.videoUrl}
+                      title="Video del artículo"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="w-full h-full"
+                    />
+                  </div>
+                </section>
+              )}
+
+              {hasBody && (
+                <section>
+                  <h2
+                    className="text-lg font-bold text-journal-navy mb-4"
+                    style={{ fontFamily: 'var(--font-display)' }}
+                  >
+                    Texto completo
+                  </h2>
+                  <ArticleBody sections={article.sections} />
+                </section>
+              )}
+
+              {!hasBody && article.pdfUrl && (
+                <section>
+                  <h2
+                    className="text-lg font-bold text-journal-navy mb-4"
+                    style={{ fontFamily: 'var(--font-display)' }}
+                  >
+                    Texto completo
                   </h2>
                   <div className="bg-white rounded-xl border border-gray-200 p-6 text-center">
                     <BookOpen className="w-10 h-10 text-gray-300 mx-auto mb-3" />
@@ -212,9 +341,8 @@ export default async function ArticuloPage({ params }) {
                     </a>
                   </div>
                 </section>
-              ) : null}
+              )}
 
-              {/* Fechas */}
               <section className="border-t border-gray-100 pt-6">
                 <div className="flex flex-wrap gap-6 text-xs text-gray-500">
                   {article.receivedDate && <span>Recibido: {article.receivedDate}</span>}
@@ -222,11 +350,49 @@ export default async function ArticuloPage({ params }) {
                   {article.publishedDate && <span>Publicado: {article.publishedDate}</span>}
                 </div>
               </section>
+
+              {relatedArticles.length > 0 && (
+                <section className="border-t border-gray-100 pt-8">
+                  <h2
+                    className="text-lg font-bold text-journal-navy mb-4"
+                    style={{ fontFamily: 'var(--font-display)' }}
+                  >
+                    Artículos relacionados
+                  </h2>
+                  <ul className="space-y-3">
+                    {relatedArticles.map((rel) => {
+                      const relType = ARTICLE_TYPES[rel.type] || {}
+                      return (
+                        <li key={rel.slug}>
+                          <Link
+                            href={`/articulos/${rel.slug}`}
+                            className="group block bg-white rounded-lg border border-gray-200 hover:border-primary-300 hover:shadow-sm p-4 transition-all"
+                          >
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="px-2 py-0.5 rounded text-xs font-semibold bg-primary-50 text-primary-700">
+                                {relType.label || rel.type}
+                              </span>
+                            </div>
+                            <p className="font-semibold text-gray-900 group-hover:text-primary-700 text-sm leading-snug" style={{ fontFamily: 'var(--font-display)' }}>
+                              {rel.title}
+                            </p>
+                            <p className="text-xs text-gray-500 mt-1">{rel.authors.map((a) => a.name).join(', ')}</p>
+                          </Link>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </section>
+              )}
             </div>
 
-            {/* ── Sidebar ── */}
             <div className="space-y-5">
-              {/* Acciones */}
+              {hasBody && (
+                <div className="bg-white rounded-xl border border-gray-200 p-5 sticky top-24">
+                  <ArticleTOC sections={article.sections} />
+                </div>
+              )}
+
               <div className="bg-white rounded-xl border border-gray-200 p-5">
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">
                   Acciones
@@ -242,6 +408,7 @@ export default async function ArticuloPage({ params }) {
                       Descargar PDF
                     </a>
                   )}
+                  <CiteButton article={article} issue={issue} />
                   {article.doi && (
                     <a
                       href={`https://doi.org/${article.doi}`}
@@ -255,7 +422,10 @@ export default async function ArticuloPage({ params }) {
                 </div>
               </div>
 
-              {/* Info del número */}
+              <div className="bg-white rounded-xl border border-gray-200 p-5">
+                <ShareButtons url={fullUrl} title={article.title} />
+              </div>
+
               {issue && (
                 <div className="bg-white rounded-xl border border-gray-200 p-5">
                   <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">
@@ -280,7 +450,6 @@ export default async function ArticuloPage({ params }) {
                 </div>
               )}
 
-              {/* Licencia */}
               <div className="bg-gray-50 rounded-xl border border-gray-200 p-5">
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
                   Licencia

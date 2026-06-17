@@ -79,11 +79,11 @@ export default function Footer() {
               Licencia CC BY-NC-SA 4.0
             </p>
             <a
-              href="mailto:revistaramp@sampre.com.ar"
+              href="mailto:revista-ramp@sampre.com.ar"
               className="flex items-center gap-2 mt-4 text-sm text-primary-400 hover:text-primary-300 transition-colors"
             >
               <Mail className="w-4 h-4" />
-              revistaramp@sampre.com.ar
+              revista-ramp@sampre.com.ar
             </a>
           </div>
 

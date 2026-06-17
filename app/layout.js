@@ -28,6 +28,7 @@ export const metadata = {
   },
   description:
     'Revista Argentina de Medicina Prehospitalaria (RAMP). Publicación científica de acceso abierto de la Sociedad Argentina de Medicina Prehospitalaria (SAMPRE). Emergencias prehospitalarias, sistemas EMS, desastres, transporte sanitario.',
+  applicationName: 'RAMP',
   keywords: [
     'revista médica prehospitalaria',
     'RAMP',
@@ -40,21 +41,54 @@ export const metadata = {
     'transporte sanitario',
     'acceso abierto',
     'publicación científica',
+    'revista científica argentina',
+    'paramédicos',
+    'enfermería de emergencias',
+    'medicina extrahospitalaria',
   ],
-  authors: [{ name: 'SAMPRE — Sociedad Argentina de Medicina Prehospitalaria' }],
+  authors: [{ name: 'SAMPRE — Sociedad Argentina de Medicina Prehospitalaria', url: 'https://sampre.com.ar' }],
   creator: 'SAMPRE',
   publisher: 'Sociedad Argentina de Medicina Prehospitalaria',
+  category: 'Medical Journal',
+  formatDetection: { telephone: false, email: false, address: false },
+  alternates: {
+    canonical: '/',
+    languages: { 'es-AR': '/' },
+  },
   openGraph: {
     type: 'website',
     locale: 'es_AR',
     url: 'https://revista.sampre.com.ar',
     title: 'RAMP — Revista Argentina de Medicina Prehospitalaria',
     description:
-      'Publicación científica de acceso abierto de SAMPRE. Emergencias prehospitalarias, EMS, desastres y más.',
+      'Publicación científica de acceso abierto de SAMPRE. Emergencias prehospitalarias, EMS, desastres, transporte sanitario y más.',
     siteName: 'RAMP',
-    images: [{ url: '/images/logos/logo-sampre.PNG', width: 1200, height: 630, alt: 'RAMP' }],
   },
-  robots: { index: true, follow: true },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'RAMP — Revista Argentina de Medicina Prehospitalaria',
+    description: 'Publicación científica de acceso abierto de SAMPRE.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  icons: { icon: '/favicon.ico' },
+  referrer: 'origin-when-cross-origin',
+}
+
+export const viewport = {
+  themeColor: '#0f2240',
+  colorScheme: 'light',
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({ children }) {
@@ -63,7 +97,7 @@ export default function RootLayout({ children }) {
       lang="es"
       className={`${playfair.variable} ${lora.variable} ${dmSans.variable}`}
     >
-      <body className="antialiased">
+      <body className="antialiased" suppressHydrationWarning>
         {children}
         <Analytics />
       </body>

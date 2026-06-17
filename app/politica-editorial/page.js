@@ -5,7 +5,13 @@ import { Shield, Eye, CheckCircle, ExternalLink } from 'lucide-react'
 
 export const metadata = {
   title: 'Política Editorial',
-  description: 'Política editorial, sistema de revisión por pares, ética, derechos de autor y acceso abierto de la RAMP.',
+  description: 'Política editorial, sistema de revisión por pares doble ciego, ética científica, derechos de autor y acceso abierto bajo licencia CC BY-NC-SA 4.0 de la RAMP.',
+  alternates: { canonical: '/politica-editorial' },
+  openGraph: {
+    url: '/politica-editorial',
+    title: 'Política Editorial | RAMP',
+    description: 'Política editorial y sistema de revisión por pares de la RAMP.',
+  },
 }
 
 function Section({ id, title, Icon, children }) {
@@ -187,10 +193,10 @@ export default function PoliticaEditorialPage() {
                 Contactar al comité editorial
               </Link>
               <a
-                href="mailto:revistaramp@sampre.com.ar"
+                href="mailto:revista-ramp@sampre.com.ar"
                 className="inline-flex items-center justify-center px-5 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors text-sm"
               >
-                revistaramp@sampre.com.ar
+                revista-ramp@sampre.com.ar
               </a>
             </div>
           </div>

@@ -5,7 +5,13 @@ import { ArrowRight, CheckCircle } from 'lucide-react'
 
 export const metadata = {
   title: 'Instrucciones para Autores',
-  description: 'Guía completa para el envío de manuscritos a la Revista Argentina de Medicina Prehospitalaria (RAMP). Tipos de artículos, formato, estructura y normas éticas.',
+  description: 'Guía completa para el envío de manuscritos a la Revista Argentina de Medicina Prehospitalaria (RAMP). Tipos de artículos, formato IMRyD, referencias Vancouver, estándares ICMJE/CONSORT/PRISMA y normas éticas.',
+  alternates: { canonical: '/instrucciones-para-autores' },
+  openGraph: {
+    url: '/instrucciones-para-autores',
+    title: 'Instrucciones para Autores | RAMP',
+    description: 'Guía completa para el envío de manuscritos a la RAMP.',
+  },
 }
 
 function Section({ id, title, children }) {
@@ -335,10 +341,10 @@ export default function InstruccionesPage() {
                       Enviar Manuscrito <ArrowRight className="w-4 h-4" />
                     </Link>
                     <a
-                      href="mailto:revistaramp@sampre.com.ar"
+                      href="mailto:revista-ramp@sampre.com.ar"
                       className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors text-sm"
                     >
-                      revistaramp@sampre.com.ar
+                      revista-ramp@sampre.com.ar
                     </a>
                   </div>
                 </div>

@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Menu, X, BookOpen } from 'lucide-react'
+import { useRouter, usePathname } from 'next/navigation'
+import { Menu, X, Search } from 'lucide-react'
 
 const navLinks = [
   { href: '/',                             label: 'Inicio' },
@@ -15,8 +15,37 @@ const navLinks = [
   { href: '/contacto',                     label: 'Enviar Manuscrito' },
 ]
 
+function SearchForm({ onSubmit, autoFocus, placeholder = 'Buscar artículos, autores, palabras clave...' }) {
+  const router = useRouter()
+  const [query, setQuery] = useState('')
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const q = query.trim()
+    router.push(q ? `/articulos?q=${encodeURIComponent(q)}` : '/articulos')
+    onSubmit?.()
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="relative w-full" role="search">
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+      <label htmlFor="header-search" className="sr-only">Buscar artículos</label>
+      <input
+        id="header-search"
+        type="search"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        autoFocus={autoFocus}
+        placeholder={placeholder}
+        className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-gray-200 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition"
+      />
+    </form>
+  )
+}
+
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const pathname = usePathname()
 
   return (
@@ -28,10 +57,10 @@ export default function Header() {
             ISSN&nbsp;en&nbsp;trámite&nbsp;·&nbsp;Acceso Abierto&nbsp;·&nbsp;CC&nbsp;BY-NC-SA&nbsp;4.0
           </span>
           <a
-            href="mailto:revistaramp@sampre.com.ar"
+            href="mailto:revista-ramp@sampre.com.ar"
             className="text-primary-300 hover:text-primary-200 transition-colors"
           >
-            revistaramp@sampre.com.ar
+            revista-ramp@sampre.com.ar
           </a>
         </div>
       </div>
@@ -39,8 +68,7 @@ export default function Header() {
       {/* ── Masthead ── */}
       <div className="bg-white border-b-2 border-journal-navy">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
-          {/* Logo + Título */}
-          <Link href="/" className="flex items-center gap-4 group">
+          <Link href="/" className="flex items-center gap-4 group flex-shrink-0">
             <img
               src="/images/logos/logo-sampre.PNG"
               alt="SAMPRE"
@@ -59,8 +87,13 @@ export default function Header() {
             </div>
           </Link>
 
+          {/* Buscador desktop */}
+          <div className="hidden lg:block flex-1 max-w-md">
+            <SearchForm />
+          </div>
+
           {/* Nav desktop */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1 flex-shrink-0">
             {navLinks.map((link) => {
               const isActive = pathname === link.href
               const isSubmit = link.href === '/contacto'
@@ -79,7 +112,7 @@ export default function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-3 py-2 text-sm font-medium rounded transition-colors ${
+                  className={`px-2.5 py-2 text-sm font-medium rounded transition-colors ${
                     isActive
                       ? 'text-primary-700 bg-primary-50'
                       : 'text-gray-600 hover:text-journal-navy hover:bg-gray-50'
@@ -91,15 +124,33 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Hamburger mobile */}
-          <button
-            className="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Abrir menú"
-          >
-            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          {/* Iconos mobile */}
+          <div className="flex items-center gap-1 lg:hidden">
+            <button
+              className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+              onClick={() => setSearchOpen(!searchOpen)}
+              aria-label="Buscar"
+              aria-expanded={searchOpen}
+            >
+              <Search className="w-5 h-5" />
+            </button>
+            <button
+              className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+              aria-expanded={menuOpen}
+            >
+              {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
+
+        {/* Buscador mobile */}
+        {searchOpen && (
+          <div className="lg:hidden border-t border-gray-100 bg-white px-4 py-3">
+            <SearchForm autoFocus onSubmit={() => setSearchOpen(false)} />
+          </div>
+        )}
 
         {/* Nav mobile */}
         {menuOpen && (

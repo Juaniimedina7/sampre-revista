@@ -6,7 +6,13 @@ import { BookOpen, Calendar, FileText, ArrowRight } from 'lucide-react'
 
 export const metadata = {
   title: 'Ediciones',
-  description: 'Archivo completo de ediciones de la Revista Argentina de Medicina Prehospitalaria (RAMP).',
+  description: 'Archivo completo de ediciones de la Revista Argentina de Medicina Prehospitalaria (RAMP). Volúmenes y números publicados.',
+  alternates: { canonical: '/ediciones' },
+  openGraph: {
+    url: '/ediciones',
+    title: 'Ediciones | RAMP',
+    description: 'Archivo completo de ediciones de la RAMP.',
+  },
 }
 
 export default function EdicionesPage() {
