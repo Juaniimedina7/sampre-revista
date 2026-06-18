@@ -35,6 +35,8 @@ export default async function EdicionPage({ params }) {
   if (!issue) notFound()
 
   const issueArticles = articles.filter((a) => a.issueId === issue.id)
+  const editorial = issueArticles.find((a) => a.type === 'editorial')
+  const regularArticles = issueArticles.filter((a) => a.type !== 'editorial')
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -87,62 +89,112 @@ export default async function EdicionPage({ params }) {
               <p>Los artículos de este número estarán disponibles próximamente.</p>
             </div>
           ) : (
-            <div>
-              <div className="flex items-center gap-3 mb-8">
-                <h2
-                  className="text-xl font-bold text-journal-navy whitespace-nowrap"
-                  style={{ fontFamily: 'var(--font-display)' }}
-                >
-                  Tabla de Contenidos
-                </h2>
-                <div className="h-px flex-1 bg-gray-200" />
-                <span className="text-sm text-gray-500">{issueArticles.length} artículos</span>
-              </div>
+            <div className="space-y-12">
 
-              <div className="space-y-4">
-                {issueArticles.map((article) => {
-                  const typeInfo = ARTICLE_TYPES[article.type] || {}
-                  return (
-                    <Link
-                      key={article.slug}
-                      href={`/articulos/${article.slug}`}
-                      className="group block bg-white rounded-xl border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all p-6"
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary-100 text-primary-700">
-                              {typeInfo.label || article.type}
-                            </span>
-                            {article.pages && (
-                              <span className="text-xs text-gray-500">Págs. {article.pages}</span>
-                            )}
-                          </div>
-                          <h3
-                            className="font-bold text-gray-900 group-hover:text-primary-700 transition-colors mb-2"
-                            style={{ fontFamily: 'var(--font-display)' }}
-                          >
-                            {article.title}
-                          </h3>
-                          <p className="text-sm text-gray-600 mb-2">
-                            {article.authors.map((a) => a.name).join(', ')}
-                          </p>
-                          {article.keywords?.length > 0 && (
-                            <div className="flex flex-wrap gap-1.5">
-                              {article.keywords.map((kw) => (
-                                <span key={kw} className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                                  {kw}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                        <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-primary-600 flex-shrink-0 mt-1 transition-colors" />
+              {/* Editorial — intro al número */}
+              {editorial && (
+                <section>
+                  <div className="flex items-center gap-3 mb-5">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-journal-gold">
+                      Apertura del número
+                    </span>
+                    <div className="h-px flex-1 bg-journal-gold/30" />
+                  </div>
+                  <Link
+                    href={`/articulos/${editorial.slug}`}
+                    className="group block bg-gradient-to-br from-journal-navy to-journal-navy-light rounded-2xl border border-journal-gold/40 p-8 md:p-10 text-white hover:shadow-2xl transition-all relative overflow-hidden"
+                  >
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-journal-gold/10 rounded-full -translate-y-20 translate-x-20 blur-3xl pointer-events-none" />
+                    <div className="relative max-w-3xl">
+                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-journal-gold mb-3">
+                        Carta del Editor
+                      </p>
+                      <h2
+                        className="text-xl md:text-2xl font-bold text-white leading-snug mb-4"
+                        style={{ fontFamily: 'var(--font-display)' }}
+                      >
+                        “{editorial.title}”
+                      </h2>
+                      {editorial.abstract && (
+                        <p className="text-sm md:text-base text-gray-300 leading-relaxed mb-5 line-clamp-3">
+                          {editorial.abstract}
+                        </p>
+                      )}
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <p className="text-xs text-gray-300">
+                          — {editorial.authors[0]?.name}
+                        </p>
+                        <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-journal-gold-light group-hover:gap-2.5 transition-all">
+                          Leer carta completa <ChevronRight className="w-4 h-4" />
+                        </span>
                       </div>
-                    </Link>
-                  )
-                })}
-              </div>
+                    </div>
+                  </Link>
+                </section>
+              )}
+
+              {/* Tabla de contenidos */}
+              {regularArticles.length > 0 && (
+                <section>
+                  <div className="flex items-center gap-3 mb-8">
+                    <h2
+                      className="text-xl font-bold text-journal-navy whitespace-nowrap"
+                      style={{ fontFamily: 'var(--font-display)' }}
+                    >
+                      Tabla de Contenidos
+                    </h2>
+                    <div className="h-px flex-1 bg-gray-200" />
+                    <span className="text-sm text-gray-500">
+                      {regularArticles.length} artículo{regularArticles.length !== 1 ? 's' : ''}
+                    </span>
+                  </div>
+
+                  <div className="space-y-4">
+                    {regularArticles.map((article) => {
+                      const typeInfo = ARTICLE_TYPES[article.type] || {}
+                      return (
+                        <Link
+                          key={article.slug}
+                          href={`/articulos/${article.slug}`}
+                          className="group block bg-white rounded-xl border border-gray-200 hover:border-primary-300 hover:shadow-md transition-all p-6"
+                        >
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary-100 text-primary-700">
+                                  {typeInfo.label || article.type}
+                                </span>
+                                {article.pages && (
+                                  <span className="text-xs text-gray-500">Págs. {article.pages}</span>
+                                )}
+                              </div>
+                              <h3
+                                className="font-bold text-gray-900 group-hover:text-primary-700 transition-colors mb-2"
+                                style={{ fontFamily: 'var(--font-display)' }}
+                              >
+                                {article.title}
+                              </h3>
+                              <p className="text-sm text-gray-600 mb-2">
+                                {article.authors.map((a) => a.name).join(', ')}
+                              </p>
+                              {article.keywords?.length > 0 && (
+                                <div className="flex flex-wrap gap-1.5">
+                                  {article.keywords.map((kw) => (
+                                    <span key={kw} className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
+                                      {kw}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-primary-600 flex-shrink-0 mt-1 transition-colors" />
+                          </div>
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </section>
+              )}
             </div>
           )}
 

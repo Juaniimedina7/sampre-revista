@@ -41,6 +41,62 @@
 
 export const articles = [
   {
+    slug: 'editorial-inaugural-al-prehospitalario',
+    title: 'Al prehospitalario lo que es del prehospitalario: un espacio propio para pensar, investigar y crecer desde la escena',
+    titleEn: null,
+    type: 'editorial',
+    authors: [
+      {
+        name: 'TSEM Lucas Henkel',
+        affiliation: 'Editor en Jefe — Revista Argentina de Medicina Prehospitalaria (RAMP). Sociedad Argentina de Medicina Prehospitalaria (SAMPRE).',
+        email: null,
+        orcid: null,
+        isCorresponding: true,
+      },
+    ],
+    keywords: ['editorial', 'medicina prehospitalaria', 'Argentina', 'Latinoamérica', 'investigación científica'],
+    keywordsEn: ['editorial', 'prehospital medicine', 'Argentina', 'Latin America', 'scientific research'],
+    abstract: 'Carta editorial inaugural de la Revista Argentina de Medicina Prehospitalaria. Una invitación a técnicos en emergencias, médicos, enfermeros, despachadores, bomberos, rescatistas, docentes y estudiantes a sistematizar y publicar su experiencia desde la escena. RAMP nace como un espacio editorial de acceso abierto y revisión por pares para generar evidencia propia sobre los sistemas de emergencias prehospitalarias en Argentina y Latinoamérica.',
+    abstractEn: null,
+    issueId: 1,
+    doi: null,
+    pages: '1-2',
+    receivedDate: null,
+    acceptedDate: null,
+    publishedDate: '2026-05-01',
+    pdfUrl: '/pdfs/vol1-num1/carta-editorial-inaugural.pdf',
+    heroImage: null,
+    videoUrl: null,
+    sections: [
+      {
+        heading: 'Editorial',
+        body: `
+<p>La medicina prehospitalaria no nace en el pasillo de un hospital. Nace en la escena: en la ruta, en el domicilio, en la montaña, en el lugar exacto donde algo se rompió y alguien necesita que otro alguien sepa qué hacer en los primeros minutos. Y sin embargo, durante décadas, ese territorio decisivo ha sido tratado como un anexo operativo de la medicina hospitalaria, como un servicio de traslado antes que como una disciplina con cuerpo propio de conocimiento. Esta revista nace para discutir esa idea.</p>
+
+<p><strong>RAMP existe para reivindicar lo prehospitalario como lo que realmente es:</strong> el primer eslabón de la cadena de sobrevida, el lugar donde se toman decisiones que condicionan el pronóstico mucho antes de que el paciente llegue a una guardia, un quirófano o a una terapia intensiva. Lo que ocurre en esos primeros minutos no es logística. Es medicina. Y la medicina, cuando se ejerce con rigor, exige evidencia, exige preguntas, exige investigación.</p>
+
+<p>Ahí aparece nuestra urgencia real, la que motiva este proyecto: en Latinoamérica y en Argentina, la producción científica propia sobre sistemas de emergencias prehospitalarias es escasa. Gran parte de los protocolos y de la evidencia que utilizamos a diario fueron construidos en otros países, sobre otras geografías, otras distancias, otros sistemas de salud y otras realidades sociales. Aplicamos algoritmos pensados para otros lugares. Atendemos la dispersión territorial de Latinoamérica con bibliografía escrita para ciudades densas del hemisferio norte. Necesitamos, con urgencia, generar evidencia propia: que nuestras distancias, nuestra epidemiología, nuestros recursos y nuestra gente formen parte de la ciencia que después aplicamos sobre ellos mismos.</p>
+
+<p>Esta carencia no es casual ni es culpa de quienes trabajan en el sistema. Es estructural. Quien trabaja en la escena suele hacerlo en guardias rotativas, bajo presión de tiempo, con escasos espacios académicos pensados específicamente para esta disciplina y sin revistas regionales que den lugar a su producción. El conocimiento prehospitalario argentino existe; lo que falta es el espacio editorial serio donde pueda escribirse, discutirse, revisarse y, sobre todo, conservarse. <strong>RAMP busca ser exactamente eso.</strong></p>
+
+<p>Nace como una revista de acceso abierto y publicación gratuita, con revisión por pares, alineada a estándares éticos internacionales, y con la ambición declarada de alcanzar indexación. Pero más allá del formato, nace con una convicción de fondo: que lo prehospitalario merece el mismo nivel de exigencia científica, el mismo rigor metodológico y el mismo respeto académico que cualquier otra especialidad de la medicina.</p>
+
+<blockquote><p>Este espacio no le pertenece a un comité editorial. Le pertenece a quien trabaja todos los días en la escena.</p></blockquote>
+
+<p>Por eso esta carta es, sobre todo, una invitación. A los técnicos en emergencias que resolvieron un caso difícil y nunca lo escribieron porque pensaron que "esto no es para una revista". A los médicos, enfermeros y despachadores de los sistemas de emergencia que tienen datos guardados en una planilla y nunca encontraron dónde publicarlos. A los bomberos y rescatistas de alta complejidad que acumulan una experiencia operativa que merece sistematizarse. A los docentes que forman nuevas generaciones y necesitan bibliografía regional para enseñar con ella. A los estudiantes que se están formando hoy y que serán, en pocos años, quienes sostengan esta disciplina en el territorio. Este espacio es de todos ellos, y lo seguirá siendo en cada número.</p>
+
+<p>No hace falta haber publicado antes para escribir en RAMP. Hace falta, simplemente, tener algo para contar desde la práctica: un reporte de caso, una revisión, un protocolo que funciona en el terreno, una pregunta que merece debatirse en una carta al editor. El comité editorial y el comité científico están para acompañar ese proceso, no para hacerlo inaccesible.</p>
+
+<p>Arrancamos con un número inaugural y con la humildad de saber que este es apenas el primer paso de un camino largo. Pero lo damos convencidos de que lo prehospitalario latinoamericano tiene mucho para decir, y de que ya es hora de que tenga dónde decirlo.</p>
+
+<p><strong>Bienvenidos a este espacio. Es de ustedes: para que lo escriban, lo discutan y, sobre todo, lo disfruten.</strong></p>
+
+<p style="text-align: right; margin-top: 2rem;"><em>TSEM Lucas Henkel<br/>Editor en Jefe — RAMP<br/>Sociedad Argentina de Medicina Prehospitalaria</em></p>
+        `.trim(),
+      },
+    ],
+  },
+  {
     slug: 'aplicabilidad-ssc-2026-shock-septico-pediatrico',
     title: 'Aplicabilidad prehospitalaria de la Surviving Sepsis Campaign 2026 en shock séptico pediátrico: revisión crítica y propuesta operativa',
     titleEn: 'Prehospital Applicability of the Surviving Sepsis Campaign 2026 in Pediatric Septic Shock: A Critical Review and Operational Recommendations',
@@ -170,12 +226,13 @@ export const articles = [
     acceptedDate: '2026-03-12',
     publishedDate: '2026-05-01',
     pdfUrl: '/pdfs/vol1-num1/sistemas-eph-argentina-historia.pdf',
-    heroImage: null,
+    heroImage: '/images/portadas/argentinaHistoriaOrgDesaf.png',
     videoUrl: null,
   },
 ]
 
 export const ARTICLE_TYPES = {
+  editorial: { label: 'Editorial',                   maxWords: null,  color: 'gold' },
   original:  { label: 'Artículo Original',          maxWords: 4000, color: 'primary' },
   revision:  { label: 'Revisión',                   maxWords: 5000, color: 'secondary' },
   caso:      { label: 'Reporte de Caso',             maxWords: 2000, color: 'emerald' },

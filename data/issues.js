@@ -28,6 +28,7 @@ export const issues = [
     description: 'Primer número de la Revista Argentina de Medicina Prehospitalaria. Incluye una revisión crítica sobre la aplicación prehospitalaria de la Surviving Sepsis Campaign 2026 en shock séptico pediátrico, un artículo original sobre modelo predictivo de demanda asistencial en carreras de calle, un artículo especial sobre seguridad vial y trauma, y una revisión sobre la historia y organización de los sistemas de emergencias prehospitalarias en Argentina.',
     coverImage: null,
     articleSlugs: [
+      'editorial-inaugural-al-prehospitalario',
       'aplicabilidad-ssc-2026-shock-septico-pediatrico',
       'modelo-predictivo-15k-adizero-2026',
       'rutas-en-riesgo-estado-camino-emergencia',

@@ -189,9 +189,11 @@ export default function HomePage() {
     ? articles.filter((a) => a.issueId === latestIssue.id)
     : []
 
-  const featuredArticle = issueArticles[0]
-  const gridArticles = issueArticles.slice(1, 4)
-  const sidebarArticles = articles.slice(0, 5)
+  const editorial = issueArticles.find((a) => a.type === 'editorial')
+  const nonEditorialArticles = issueArticles.filter((a) => a.type !== 'editorial')
+  const featuredArticle = nonEditorialArticles[0]
+  const gridArticles = nonEditorialArticles.slice(1, 4)
+  const sidebarArticles = nonEditorialArticles.slice(0, 5)
   const topTags = getAllTags().slice(0, 10)
 
   return (
@@ -281,6 +283,30 @@ export default function HomePage() {
                 </div>
 
                 <aside className="space-y-6">
+                  {/* Carta del editor */}
+                  {editorial && (
+                    <Link
+                      href={`/articulos/${editorial.slug}`}
+                      className="group block bg-gradient-to-br from-journal-navy to-journal-navy-light rounded-xl border border-journal-gold/40 p-6 text-white hover:shadow-lg transition-all relative overflow-hidden"
+                    >
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-journal-gold/10 rounded-full -translate-y-12 translate-x-12 blur-2xl pointer-events-none" />
+                      <div className="relative">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-journal-gold mb-3">
+                          Carta del Editor
+                        </p>
+                        <p className="text-base font-bold text-white leading-snug mb-3 line-clamp-3" style={{ fontFamily: 'var(--font-display)' }}>
+                          “{editorial.title}”
+                        </p>
+                        <p className="text-xs text-gray-300 mb-3">
+                          — {editorial.authors[0]?.name}
+                        </p>
+                        <span className="inline-flex items-center gap-1 text-xs font-semibold text-journal-gold-light group-hover:gap-2 transition-all">
+                          Leer carta inaugural <ChevronRight className="w-3.5 h-3.5" />
+                        </span>
+                      </div>
+                    </Link>
+                  )}
+
                   {/* Más recientes */}
                   <div className="bg-journal-cream rounded-xl border border-gray-200 p-5">
                     <h3 className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-4 flex items-center gap-2">
