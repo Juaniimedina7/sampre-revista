@@ -42,7 +42,7 @@
 export const articles = [
   {
     slug: 'editorial-inaugural-al-prehospitalario',
-    title: 'Al prehospitalario lo que es del prehospitalario: un espacio propio para pensar, investigar y crecer desde la escena',
+    title: 'Al prehospitalario lo que es del prehospitalario: un espacio propio para pensar, investigar y crecer desde la escena.',
     titleEn: null,
     type: 'editorial',
     authors: [
@@ -98,8 +98,8 @@ export const articles = [
   },
   {
     slug: 'aplicabilidad-ssc-2026-shock-septico-pediatrico',
-    title: 'Aplicabilidad prehospitalaria de la Surviving Sepsis Campaign 2026 en shock séptico pediátrico: revisión crítica y propuesta operativa',
-    titleEn: 'Prehospital Applicability of the Surviving Sepsis Campaign 2026 in Pediatric Septic Shock: A Critical Review and Operational Recommendations',
+    title: 'Aplicabilidad prehospitalaria de la Surviving Sepsis Campaign 2026 en shock séptico pediátrico: revisión crítica y propuesta operativa.',
+    titleEn: 'Prehospital Applicability of the Surviving Sepsis Campaign 2026 in Pediatric Septic Shock: A Critical Review and Operational Recommendations.',
     type: 'revision',
     authors: [
       {
@@ -133,8 +133,8 @@ export const articles = [
   },
   {
     slug: 'modelo-predictivo-15k-adizero-2026',
-    title: 'Modelo predictivo de demanda asistencial en carreras de calle: desarrollo, aplicación y validación prospectiva en la 15K Adizero Buenos Aires 2026',
-    titleEn: 'Predictive model of medical demand in road races: development, implementation and prospective validation at the 15K Adizero Buenos Aires 2026',
+    title: 'Modelo predictivo de demanda asistencial en carreras de calle: desarrollo, aplicación y validación prospectiva en la 15K Adizero Buenos Aires 2026.',
+    titleEn: 'Predictive model of medical demand in road races: development, implementation and prospective validation at the 15K Adizero Buenos Aires 2026.',
     type: 'original',
     authors: [
       {
@@ -175,8 +175,8 @@ export const articles = [
   },
   {
     slug: 'rutas-en-riesgo-estado-camino-emergencia',
-    title: 'Rutas en riesgo: cuando el estado del camino anticipa la emergencia',
-    titleEn: 'Routes at risk: when the condition of the road anticipates an emergency',
+    title: 'Rutas en riesgo: cuando el estado del camino anticipa la emergencia.',
+    titleEn: 'Routes at risk: when the condition of the road anticipates an emergency.',
     type: 'especial',
     authors: [
       {
@@ -203,8 +203,8 @@ export const articles = [
   },
   {
     slug: 'sistemas-eph-argentina-historia-organizacion-desafios',
-    title: 'Sistemas de emergencias prehospitalarias en Argentina: historia, organización y desafíos actuales',
-    titleEn: 'Prehospital emergency systems in Argentina: history, organization and current challenges',
+    title: 'Sistemas de emergencias prehospitalarias en Argentina: historia, organización y desafíos actuales.',
+    titleEn: 'Prehospital emergency systems in Argentina: history, organization and current challenges.',
     type: 'revision',
     authors: [
       {
@@ -226,7 +226,7 @@ export const articles = [
     acceptedDate: '2026-03-12',
     publishedDate: '2026-05-01',
     pdfUrl: '/pdfs/vol1-num1/sistemas-eph-argentina-historia.pdf',
-    heroImage: '/images/portadas/argentinaHistoriaOrgDesaf.png',
+    heroImage: null,
     videoUrl: null,
   },
 ]
