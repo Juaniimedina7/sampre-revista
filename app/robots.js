@@ -1,4 +1,4 @@
-const SITE_URL = 'https://revista.sampre.com.ar'
+const SITE_URL = 'https://ramp.sampre.com.ar'
 
 export default function robots() {
   return {

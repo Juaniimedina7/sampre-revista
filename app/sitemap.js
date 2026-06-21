@@ -2,7 +2,7 @@ import { articles } from '@/data/articles'
 import { issues } from '@/data/issues'
 import { getAllTags } from '@/lib/tags'
 
-const SITE_URL = 'https://revista.sampre.com.ar'
+const SITE_URL = 'https://ramp.sampre.com.ar'
 
 export default function sitemap() {
   const now = new Date()

@@ -45,7 +45,7 @@ export default async function OpengraphImage() {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 22, color: 'rgba(255,255,255,0.7)' }}>
-          <span>revista.sampre.com.ar</span>
+          <span>ramp.sampre.com.ar</span>
           <span>ISSN en trámite · CC BY-NC-SA 4.0</span>
         </div>
       </div>

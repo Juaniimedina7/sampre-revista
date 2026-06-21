@@ -4,7 +4,7 @@
 
 Sitio web institucional de la revista científica de SAMPRE (Sociedad Argentina de Medicina Prehospitalaria). Sitio público, estático, sin login para usuarios finales en su estado actual.
 
-- **Dominio producción:** https://revista.sampre.com.ar (subdominio configurado en Ferozo/Vercel)
+- **Dominio producción:** https://ramp.sampre.com.ar (subdominio configurado en Ferozo/Vercel)
 - **Repo:** https://github.com/Juaniimedina7/sampre-revista
 - **Deploy:** Vercel (auto-deploy en `git push` a `main`)
 - **Mantenedor único:** Juan (juani.medina@satori-ci.com)
@@ -161,7 +161,7 @@ Datos completos con bios en `app/comite-editorial/page.js`.
 - `app/robots.js` declara el sitemap
 - `app/opengraph-image.js` genera OG image 1200x630 con branding RAMP
 - `viewport.themeColor` = `#0f2240` (journal-navy)
-- `metadataBase` = `https://revista.sampre.com.ar`
+- `metadataBase` = `https://ramp.sampre.com.ar`
 
 Si agregás página nueva: incluir `metadata` con `title`, `description`, `alternates.canonical`, `openGraph`. Para Server Components siempre. Para Client Components, separar en `page.js` (server con metadata) + `XxxClient.js` (con `'use client'`).
 

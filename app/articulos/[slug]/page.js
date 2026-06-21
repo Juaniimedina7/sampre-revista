@@ -11,7 +11,7 @@ import CiteButton from '../_components/CiteButton'
 import ArticleBody, { ArticleTOC } from '../_components/ArticleBody'
 import { Calendar, User, Tag, Download, ArrowLeft, ExternalLink, BookOpen, Clock } from 'lucide-react'
 
-const SITE_URL = 'https://revista.sampre.com.ar'
+const SITE_URL = 'https://ramp.sampre.com.ar'
 
 export async function generateStaticParams() {
   return articles.map((a) => ({ slug: a.slug }))

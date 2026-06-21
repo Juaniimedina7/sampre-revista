@@ -67,7 +67,7 @@ const periodicalLd = {
   '@type': 'Periodical',
   name: 'Revista Argentina de Medicina Prehospitalaria',
   alternateName: 'RAMP',
-  url: 'https://revista.sampre.com.ar',
+  url: 'https://ramp.sampre.com.ar',
   inLanguage: 'es-AR',
   publisher: {
     '@type': 'Organization',
@@ -85,11 +85,11 @@ const websiteLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'RAMP',
-  url: 'https://revista.sampre.com.ar',
+  url: 'https://ramp.sampre.com.ar',
   inLanguage: 'es-AR',
   potentialAction: {
     '@type': 'SearchAction',
-    target: 'https://revista.sampre.com.ar/articulos?q={search_term_string}',
+    target: 'https://ramp.sampre.com.ar/articulos?q={search_term_string}',
     'query-input': 'required name=search_term_string',
   },
 }

@@ -21,7 +21,7 @@ const dmSans = DM_Sans({
 })
 
 export const metadata = {
-  metadataBase: new URL('https://revista.sampre.com.ar'),
+  metadataBase: new URL('https://ramp.sampre.com.ar'),
   title: {
     default: 'RAMP — Revista Argentina de Medicina Prehospitalaria',
     template: '%s | RAMP',
@@ -58,7 +58,7 @@ export const metadata = {
   openGraph: {
     type: 'website',
     locale: 'es_AR',
-    url: 'https://revista.sampre.com.ar',
+    url: 'https://ramp.sampre.com.ar',
     title: 'RAMP — Revista Argentina de Medicina Prehospitalaria',
     description:
       'Publicación científica de acceso abierto de SAMPRE. Emergencias prehospitalarias, EMS, desastres, transporte sanitario y más.',
